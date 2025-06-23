@@ -3,7 +3,7 @@ name: Daily Tieba Sign-In
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 22 * * *'  # 北京时间 6:30 (UTC+8)
+    - cron: '30 22 * * *'  # 北京时间早上 6:30
 
 jobs:
   signin:
@@ -18,12 +18,14 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '8'
-          cache: 'maven'  # 使用官方推荐的 Maven 依赖缓存
+          cache: 'maven'
 
       - name: Build and execute
         env:
           BDUSS: ${{ secrets.BDUSS }}
           SCKEY: ${{ secrets.SCKEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           mvn -B compile exec:java \
             -Dexec.mainClass="top.srcrs.Run" \
